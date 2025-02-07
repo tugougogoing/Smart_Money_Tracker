@@ -100,7 +100,6 @@ smart-money-tracker/
         └── index.test.ts  # 入口文件测试
 ```
 ## 技术支持
-- 交流群：[乌托邦社区](https://t.me/xiaojiucaiPC)
 - 交流群：[Buff社区](https://t.me/chainbuff)
 
 ## 免责声明
