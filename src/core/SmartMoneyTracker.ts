@@ -82,7 +82,7 @@ export class SmartMoneyTracker {
             tokenAmount: Math.abs(tokenInfo.amount)
         });
 
-        console.log(output);
+        await this.sendToTelegram(output);
         return tokenInfo;
     }
 
@@ -118,5 +118,36 @@ export class SmartMoneyTracker {
         }
 
         return null;
+    }
+
+    private async sendToTelegram(message: string) {
+        try {
+            const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+            const TELEGRAM_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
+            
+            if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHANNEL_ID) {
+                console.error('Telegram 配置缺失');
+                return;
+            }
+
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHANNEL_ID,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Telegram API 错误: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('发送 Telegram 消息失败:', error);
+        }
     }
 } 
